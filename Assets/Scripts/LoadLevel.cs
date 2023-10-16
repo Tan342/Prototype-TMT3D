@@ -6,10 +6,16 @@ using System.Linq;
 using System.Text;
 using System;
 using System.Security.Cryptography;
+using System.Threading;
 
 public class LoadLevel : MonoBehaviour
 {
-    [SerializeField] List<GameObject> listTile;
+    [SerializeField] Config config;
+    [SerializeField] MouseEvent mouseEvent;
+    [SerializeField] Timer timer;
+
+    [SerializeField] TileManager tileManager;
+    [SerializeField] GameObject tilePrefab;
     [SerializeField] Transform spawnPos;
     [SerializeField] Transform containPos;
     [SerializeField] float force = 2f;
@@ -43,37 +49,57 @@ public class LoadLevel : MonoBehaviour
     void LoadLevelFromFile(string filePath)
     {
         List<string> filelines = File.ReadAllLines(filePath).ToList();
-        foreach(string line in filelines)
+
+        float time = float.Parse(filelines[0]);
+        timer.SetTime(time);
+
+        for(int i = 1; i < filelines.Count; i++)
         {
-            string[] sub = line.Split(' ');
+            string[] sub = filelines[i].Split(' ');
 
-            byte[] ascii = Encoding.ASCII.GetBytes(sub[0]);
-            int type = int.Parse(ascii[0].ToString());
-            type -= 65;
-
+            int type = int.Parse(sub[0]);
             int quantity = int.Parse(sub[1]);
-            for (int i = 0; i < quantity; i++)
+
+            for (int j = 0; j < quantity; j++)
             {
                 tileTypesList.Add(type);
             }
         }
         ShuffleList();
         StartCoroutine(Spawn());
+        
     }
 
     IEnumerator Spawn()
     {
         isSpawning = true;
+        int count = 0;
         foreach (int type in tileTypesList)
         {
-            GameObject tile = Instantiate(listTile[type], spawnPos.transform.position, spawnPos.localRotation);
+            GameObject tile = Instantiate(tilePrefab, spawnPos.transform.position, spawnPos.localRotation);
             tile.transform.parent = containPos;
-            Rigidbody rigidbody = tile.GetComponent<Rigidbody>();
-            rigidbody.AddRelativeForce(spawnPos.transform.forward * force);
-            rigidbody.AddForce(Vector3.down * force);
+
+            SetupTile(tile, type, count);
+            count++;
+
             yield return new WaitForSeconds(0.4f);
         }
+        mouseEvent.StarGame();
+        timer.StartCounting();
         isSpawning = false;
+    }
+
+    void SetupTile(GameObject tile, int type, int id)
+    {
+        Tile t = tile.GetComponent<Tile>();
+        t.SetSprite(config.sprites[type]);
+        t.tileType = type;
+        t.id = id;
+        tileManager.AddTile(id, t);
+
+        Rigidbody rigidbody = tile.GetComponent<Rigidbody>();
+        rigidbody.AddRelativeForce(spawnPos.transform.forward * (force - id * 10));
+        rigidbody.AddForce(Vector3.down * force);
     }
 
     private static System.Random rng = new System.Random();

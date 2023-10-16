@@ -11,13 +11,13 @@ public class Box : MonoBehaviour
     [SerializeField] float speed = 2f;
 
     Image image;
-    public TileType tileType;
+    public int tileType;
 
     // Start is called before the first frame update
     void Start()
     {
         image = GetComponent<Image>();
-        tileType = TileType.Null;
+        tileType = -1;
     }
 
     public void SetPos(Vector3 pos)
@@ -39,7 +39,7 @@ public class Box : MonoBehaviour
 
     public void ResetTile()
     {
-        tileType = TileType.Null;
+        tileType = -1;
         image.sprite = null;
     }
 

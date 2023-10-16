@@ -1,17 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ListManager : MonoBehaviour
 {
+    [SerializeField] GameObject tilePrefab;
+    [SerializeField] TileManager tileManager;
     [SerializeField] ScoreManager scoreManager;
     [SerializeField] Transform returnPos;
 
     List<Box> list = new List<Box>();
     List<Vector3> position = new List<Vector3>();
 
-    int latestTile = -1;
+    int latestTileInList = -1;
+    Tile latestTile;
 
     // Start is called before the first frame update
     void Start()
@@ -43,12 +48,15 @@ public class ListManager : MonoBehaviour
         }
 
         list[index].SetTile(tile);
-        latestTile = index;
+        tileManager.DeleteTile(tile.id);
+        latestTileInList = index;
+        latestTile = tile;
 
         if (CountExist(tile) >= 3)
         {
             scoreManager.AddScore(1);
-            latestTile = -1;
+            latestTileInList = -1;
+            latestTile = null;
             StartCoroutine(DeleteTile(tile,index));
         }
     }
@@ -63,7 +71,7 @@ public class ListManager : MonoBehaviour
                 box.ResetTile();
             }
         }
-        MoveBoxForwards(index);
+        MoveBoxForwards(index, 3);
     }
 
     void MoveBoxBackwards(int index)
@@ -76,15 +84,15 @@ public class ListManager : MonoBehaviour
         }
     }
 
-    void MoveBoxForwards(int index)
+    void MoveBoxForwards(int index, int amount)
     {
         if (HasOtherTileBehind(index))
         {
             for (int i = index + 1; i < list.Count; i++) 
             {
-                list[i].Moving(position[i - 3]);
-                list[i-3].SetPos(position[i]);
-                Swap(i, i -3);
+                list[i].Moving(position[i - amount]);
+                list[i-amount].SetPos(position[i]);
+                Swap(i, i -amount);
             }
         }
     }
@@ -119,7 +127,7 @@ public class ListManager : MonoBehaviour
     {
         for(int i =  index+1; i < list.Count; i++)
         {
-            if (list[i].tileType != TileType.Null)
+            if (list[i].tileType != -1)
             {
                 return true;
             }
@@ -149,22 +157,23 @@ public class ListManager : MonoBehaviour
 
     public void ReturnPreviousStep()
     {
-        if(latestTile == -1)
+        if(latestTileInList == -1)
         {
             return;
         }
 
-        Instantiate(list[latestTile], returnPos);
-        list[latestTile].ResetTile();
-        if (HasOtherTileBehind(latestTile))
-        {
-            for (int i = latestTile + 1; i < list.Count; i++)
-            {
-                list[i].Moving(position[i - 1]);
-                list[i - 1].SetPos(position[i]);
-                Swap(i, i - 1);
-            }
-        }
-        latestTile = -1;
+        GameObject temp = Instantiate(tilePrefab, returnPos.transform.position, Quaternion.identity);
+        Tile tile = temp.GetComponent<Tile>();
+        tile.SetSprite(latestTile.GetSprite());
+        tile.tileType = latestTile.tileType;
+        tile.id = latestTile.id;
+        tileManager.AddTile(tile.id,tile);
+
+        list[latestTileInList].ResetTile();
+
+        MoveBoxForwards(latestTileInList, 1);
+       
+        latestTileInList = -1;
+        latestTile = null;
     }
 }

@@ -7,13 +7,13 @@ public class MouseEvent : MonoBehaviour
     [SerializeField] LayerMask mask;
     [SerializeField] ListManager listManager;
     bool isProcessing = false;
-    // Start is called before the first frame update
+    bool isPlaying = false;
 
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonUp(0) && isPlaying)
         {
             if(!isProcessing)
             {
@@ -21,6 +21,11 @@ public class MouseEvent : MonoBehaviour
                 isProcessing = true;
             }
         }
+    }
+
+    public void StarGame()
+    {
+        isPlaying = true;
     }
 
     IEnumerator Processing()
@@ -33,6 +38,7 @@ public class MouseEvent : MonoBehaviour
             if (selectionTile != null)
             {
                 listManager.AddTile(selectionTile);
+                Destroy(raycastHit.transform.gameObject);
             }
         }
         yield return new WaitForSeconds(0.5f);

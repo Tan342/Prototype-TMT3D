@@ -19,7 +19,16 @@ public class SetupTile : MonoBehaviour
         originColor = meshRenderer.material.color;
     }
 
-    /*private void OnMouseDown()
+    private void Update()
+    {
+        /*if (transform.rotation.x < -160 || transform.rotation.x > 160
+            || transform.rotation.z < -160 || transform.rotation.z > 160)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.up);
+        }*/
+    }
+
+    private void OnMouseDown()
     {
         meshRenderer.material.color = Color.black;
     }
@@ -27,5 +36,5 @@ public class SetupTile : MonoBehaviour
     private void OnMouseUp()
     {
         meshRenderer.material.color = originColor;
-    }*/
+    }
 }

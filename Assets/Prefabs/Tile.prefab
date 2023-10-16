@@ -288,10 +288,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4417334713134017576}
   - component: {fileID: 4417334713134017577}
-  - component: {fileID: 458286295674934079}
   - component: {fileID: 6206078724753005791}
+  - component: {fileID: 551305359850327658}
   m_Layer: 6
-  m_Name: TileA
+  m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -327,20 +327,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcecd8bca6f9f3d458f5b32466a092cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 243890107, guid: 48393ebbe26cece4cbc783e41fc900f3, type: 3}
+  image: {fileID: 0}
   tileType: 0
---- !u!114 &458286295674934079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4417334713134017582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f486ee3a50905c840a3781b6748f1c08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  id: 0
 --- !u!54 &6206078724753005791
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -357,3 +346,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &551305359850327658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4417334713134017582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f486ee3a50905c840a3781b6748f1c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
