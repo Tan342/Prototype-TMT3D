@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
+    [SerializeField] AudioManager audioManager;
     [SerializeField] float timeCombo = 5f;
     [SerializeField] TextMeshProUGUI scoresText;
     [SerializeField] Slider comboSlider;
@@ -43,6 +44,7 @@ public class ScoreManager : MonoBehaviour
         scoresText.text = "Score: " + score;
         combo++;
         comboText.text = "x" + combo;
+        audioManager.PlayScoringSound();
         if (!isCombo)
         {
             isCombo = true;

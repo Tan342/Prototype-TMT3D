@@ -8,6 +8,7 @@ using UnityEngine;
 public class TileManager : MonoBehaviour
 {
     [SerializeField] ListManager listManager;
+    [SerializeField] DisplayMenu menu;
 
     Dictionary<int, Tile> listTile= new Dictionary<int, Tile>();
 
@@ -20,10 +21,10 @@ public class TileManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void Mix()
+    public void Shuffle()
     {
         foreach (KeyValuePair<int, Tile> entry in listTile)
         {
@@ -65,6 +66,22 @@ public class TileManager : MonoBehaviour
             
             
         }
+    }
+
+    IEnumerator WinDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        menu.SetDisplayWin(true);
+    }
+
+    public void Win()
+    {
+        StartCoroutine(WinDelay());
+    }
+
+    public int GetQuantity()
+    {
+        return listTile.Count;
     }
 
     public void ReturnPreviousStep()

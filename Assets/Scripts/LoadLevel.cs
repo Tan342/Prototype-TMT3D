@@ -26,8 +26,7 @@ public class LoadLevel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string filePath = Application.dataPath + "/LevelDesign" + "/level" + "1" +".txt";
-        LoadLevelFromFile(filePath);
+
     }
 
     // Update is called once per frame

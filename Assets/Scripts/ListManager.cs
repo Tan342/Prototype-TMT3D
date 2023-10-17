@@ -10,13 +10,14 @@ public class ListManager : MonoBehaviour
     [SerializeField] GameObject tilePrefab;
     [SerializeField] TileManager tileManager;
     [SerializeField] ScoreManager scoreManager;
-    [SerializeField] Transform returnPos;
+    [SerializeField] Transform containTiles;
 
     List<Box> list = new List<Box>();
     List<Vector3> position = new List<Vector3>();
 
     int latestTileInList = -1;
     Tile latestTile;
+    Vector3 latestTilePos;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,7 @@ public class ListManager : MonoBehaviour
         tileManager.DeleteTile(tile.id);
         latestTileInList = index;
         latestTile = tile;
+        latestTilePos = tile.transform.position;
 
         if (CountExist(tile) >= 3)
         {
@@ -58,6 +60,11 @@ public class ListManager : MonoBehaviour
             latestTileInList = -1;
             latestTile = null;
             StartCoroutine(DeleteTile(tile,index));
+        }
+
+        if(tileManager.GetQuantity() == 0)
+        {
+            tileManager.Win();
         }
     }
 
@@ -162,7 +169,8 @@ public class ListManager : MonoBehaviour
             return;
         }
 
-        GameObject temp = Instantiate(tilePrefab, returnPos.transform.position, Quaternion.identity);
+        GameObject temp = Instantiate(tilePrefab, latestTilePos, Quaternion.identity);
+        temp.transform.parent = containTiles;
         Tile tile = temp.GetComponent<Tile>();
         tile.SetSprite(latestTile.GetSprite());
         tile.tileType = latestTile.tileType;

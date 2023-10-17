@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class MouseEvent : MonoBehaviour
 {
     [SerializeField] LayerMask mask;
     [SerializeField] ListManager listManager;
+    [SerializeField] AudioManager audioManager;
     bool isProcessing = false;
     bool isPlaying = false;
 
@@ -40,6 +42,7 @@ public class MouseEvent : MonoBehaviour
                 listManager.AddTile(selectionTile);
                 Destroy(raycastHit.transform.gameObject);
             }
+            audioManager.PlayPickUpSound();
         }
         yield return new WaitForSeconds(0.5f);
         isProcessing =  false;

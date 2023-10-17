@@ -5,6 +5,7 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
+    [SerializeField] DisplayMenu menu;
     [SerializeField] TextMeshProUGUI textMeshPro;
 
     float time = 300;
@@ -24,12 +25,33 @@ public class Timer : MonoBehaviour
         if (isCounting)
         {
             CountingTime();
+            if(time <= 0)
+            {
+                menu.SetDisplayLose(true);
+            }
         }
+    }
+
+    public void FreezeTime()
+    {
+        StartCoroutine(Pause());
+    }
+
+    IEnumerator Pause()
+    {
+        isCounting = false;
+        yield return new WaitForSeconds(10);
+        isCounting = true;
     }
 
     public void StartCounting()
     {
         isCounting = true;
+    }
+
+    public void StopCounting()
+    {
+        isCounting = false;
     }
 
     public void SetTime(float time)
