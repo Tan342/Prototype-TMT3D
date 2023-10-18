@@ -27,7 +27,7 @@ public class Timer : MonoBehaviour
             CountingTime();
             if(time <= 0)
             {
-                menu.SetDisplayLose(true);
+                menu.DisplayLose(true);
             }
         }
     }

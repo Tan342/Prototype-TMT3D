@@ -7,16 +7,14 @@ using UnityEngine;
 
 public class ListManager : MonoBehaviour
 {
-    [SerializeField] GameObject tilePrefab;
     [SerializeField] TileManager tileManager;
     [SerializeField] ScoreManager scoreManager;
-    [SerializeField] Transform containTiles;
+    [SerializeField] DisplayMenu menu;
 
-    List<Box> list = new List<Box>();
+    Tile[] list = new Tile[7];
     List<Vector3> position = new List<Vector3>();
 
-    int latestTileInList = -1;
-    Tile latestTile;
+    int latestTileIndex = -1;
     Vector3 latestTilePos;
 
     // Start is called before the first frame update
@@ -24,7 +22,6 @@ public class ListManager : MonoBehaviour
     {
         foreach (Transform t in transform)
         {
-            list.Add(t.GetComponent<Box>());
             position.Add(t.transform.position);
         }
     }
@@ -33,83 +30,97 @@ public class ListManager : MonoBehaviour
     {
         int amount = CountExist(tile);
         int index;
-        if(amount > 0)
+        if (amount > 0)
         {
-            index = GetPosBoxExist(tile);
+            index = GetPosTileExist(tile);
             if (HasOtherTileBehind(index))
             {
-                MoveBoxBackwards(index + 1);
+                MoveTileBackwards(index + 1);
             }
             index++;
         }
         else
         {
-            index = GetPosBox();
-            
+            index = GetPosTile();
+
         }
 
-        list[index].SetTile(tile);
-        tileManager.DeleteTile(tile.id);
-        latestTileInList = index;
-        latestTile = tile;
+        list[index] = tile;
+        latestTileIndex = index;
         latestTilePos = tile.transform.position;
+        tile.Moving(position[index], false);
+        tileManager.DeleteTile(tile.id);
+        
 
-        if (CountExist(tile) >= 3)
+        if (CountExist(tile) == 3)
         {
             scoreManager.AddScore(1);
-            latestTileInList = -1;
-            latestTile = null;
-            StartCoroutine(DeleteTile(tile,index));
+            latestTileIndex = -1;
+            StartCoroutine(DeleteTile(tile, index));
+        }
+        else if (CountTileInList() == list.Length)
+        {
+            menu.LoseDelay();
+            return;
         }
 
-        if(tileManager.GetQuantity() == 0)
+        if (tileManager.GetQuantity() == 0)
         {
             tileManager.Win();
         }
     }
 
+    
+
     IEnumerator DeleteTile(Tile tile, int index)
     {
         yield return new WaitForSeconds(0.2f);
-        foreach (Box box in list)
+
+        for (int i = 0; i < list.Length; i++)
         {
-            if (box.tileType == tile.tileType)
+            if (list[i] != null && list[i].tileType == tile.tileType)
             {
-                box.ResetTile();
+                Destroy(list[i].gameObject);
+                list[i] = null;
             }
         }
-        MoveBoxForwards(index, 3);
+
+        MoveTileForwards(index, 3);
     }
 
-    void MoveBoxBackwards(int index)
+    void MoveTileBackwards(int index)
     {
-        list[list.Count - 1].SetPos(position[index]);
-        for (int i = list.Count - 2; i >= index; i--)
+        for (int i = list.Length - 2; i >= index; i--)
         {
-            list[i].Moving(position[i + 1]);
-            Swap(i, i + 1);
+            if (list[i] != null)
+            {
+                list[i].Moving(position[i + 1], false);
+                Swap(i, i + 1);
+            }
         }
     }
 
-    void MoveBoxForwards(int index, int amount)
+    void MoveTileForwards(int index, int amount)
     {
         if (HasOtherTileBehind(index))
         {
-            for (int i = index + 1; i < list.Count; i++) 
+            for (int i = index + 1; i < list.Length; i++)
             {
-                list[i].Moving(position[i - amount]);
-                list[i-amount].SetPos(position[i]);
-                Swap(i, i -amount);
+                if (list[i] != null)
+                {
+                    list[i].Moving(position[i - amount], false);
+                    Swap(i, i - amount);
+                }
             }
         }
     }
 
-    int GetPosBox()
+    int GetPosTile()
     {
         int i = 0;
-        foreach(Box box in list)
+        foreach (Tile tile in list)
         {
-            if (!box.IsUsed())
+            if (tile == null)
             {
                 return i;
             }
@@ -118,11 +129,11 @@ public class ListManager : MonoBehaviour
         return -1;
     }
 
-    int GetPosBoxExist(Tile tile)
+    int GetPosTileExist(Tile tile)
     {
-        for (int j = list.Count - 1; j >= 0; j--)
+        for (int j = list.Length - 1; j >= 0; j--)
         {
-            if (list[j].tileType == tile.tileType)
+            if (list[j] != null && list[j].tileType == tile.tileType)
             {
                 return j;
             }
@@ -132,9 +143,9 @@ public class ListManager : MonoBehaviour
 
     bool HasOtherTileBehind(int index)
     {
-        for(int i =  index+1; i < list.Count; i++)
+        for (int i = index + 1; i < list.Length; i++)
         {
-            if (list[i].tileType != -1)
+            if (list[i] != null)
             {
                 return true;
             }
@@ -142,12 +153,25 @@ public class ListManager : MonoBehaviour
         return false;
     }
 
-    int CountExist(Tile tile)
+    public int CountExist(Tile tile)
     {
         int count = 0;
-        foreach(Box box in list)
+        foreach (Tile t in list)
         {
-            if(box.tileType == tile.tileType)
+            if (t != null && t.tileType == tile.tileType)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    int CountTileInList()
+    {
+        int count = 0;
+        for (int i = 0; i < list.Length; i++)
+        {
+            if (list[i] != null)
             {
                 count++;
             }
@@ -157,31 +181,43 @@ public class ListManager : MonoBehaviour
 
     void Swap(int i, int j)
     {
-        Box temp = list[i];
+        Tile temp = list[i];
         list[i] = list[j];
         list[j] = temp;
     }
 
     public void ReturnPreviousStep()
     {
-        if(latestTileInList == -1)
+        if (latestTileIndex == -1)
         {
             return;
         }
 
-        GameObject temp = Instantiate(tilePrefab, latestTilePos, Quaternion.identity);
-        temp.transform.parent = containTiles;
-        Tile tile = temp.GetComponent<Tile>();
-        tile.SetSprite(latestTile.GetSprite());
-        tile.tileType = latestTile.tileType;
-        tile.id = latestTile.id;
-        tileManager.AddTile(tile.id,tile);
+        list[latestTileIndex].Moving(latestTilePos, true);
+        tileManager.AddTile(list[latestTileIndex].id, list[latestTileIndex]);
+        list[latestTileIndex] = null;
 
-        list[latestTileInList].ResetTile();
+        MoveTileForwards(latestTileIndex, 1);
 
-        MoveBoxForwards(latestTileInList, 1);
-       
-        latestTileInList = -1;
-        latestTile = null;
+        latestTileIndex = -1;
+    }
+
+    public Tile GetTileWithHighestNumber()
+    {
+        Tile temp = null;
+        int max = 0;
+        for(int i = 0; i < list.Length; i++)
+        {
+            if (list[i] != null)
+            {
+                int count = CountExist(list[i]);
+                if (count > max)
+                {
+                    temp = list[i];
+                    max = count;
+                }
+            }
+        }
+        return temp;
     }
 }

@@ -39,44 +39,42 @@ public class TileManager : MonoBehaviour
 
     public void HintSkill()
     {
-        StartCoroutine(Hint());
+        Tile tile = listManager.GetTileWithHighestNumber();
+        if(tile == null)
+        {
+            tile = listTile.First().Value;
+        }
+        StartCoroutine(Hint(tile));
     }
 
-    IEnumerator Hint()
+    IEnumerator Hint(Tile tile)
     {
         List<Tile> listTileTemp = listTile.Values.ToList();
-        Tile temp = listTileTemp[0];
+        int currentQuantity = listManager.CountExist(tile);
         int count = 0;
 
         for (int i = 0; i < listTileTemp.Count; i++)
         {
-            if (listTileTemp[i].tileType == temp.tileType)
+            if (listTileTemp[i].tileType == tile.tileType)
             {
                 int id = listTileTemp[i].id;
-                Destroy(listTile[id].transform.gameObject);
                 listManager.AddTile(listTile[id]);
                 count++;
 
-                if (count == 3)
+                if (count == 3 - currentQuantity)
                 {
                     break;
                 }
-                yield return new WaitForSeconds(0.75f);
+                yield return new WaitForSeconds(0.4f);
             }
             
             
         }
     }
 
-    IEnumerator WinDelay()
-    {
-        yield return new WaitForSeconds(1f);
-        menu.SetDisplayWin(true);
-    }
-
     public void Win()
     {
-        StartCoroutine(WinDelay());
+        menu.WinDelay();
     }
 
     public int GetQuantity()

@@ -40,11 +40,10 @@ public class MouseEvent : MonoBehaviour
             if (selectionTile != null)
             {
                 listManager.AddTile(selectionTile);
-                Destroy(raycastHit.transform.gameObject);
             }
             audioManager.PlayPickUpSound();
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
         isProcessing =  false;
     }
 }

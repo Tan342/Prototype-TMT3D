@@ -125,7 +125,7 @@ TextureImporter:
         width: 867
         height: 685
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -146,7 +146,7 @@ TextureImporter:
         width: 740
         height: 766
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -167,7 +167,7 @@ TextureImporter:
         width: 826
         height: 886
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -188,7 +188,7 @@ TextureImporter:
         width: 649
         height: 747
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -209,7 +209,7 @@ TextureImporter:
         width: 604
         height: 648
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -217,6 +217,111 @@ TextureImporter:
       bones: []
       spriteID: 09292cd9046d6e049aefd75bf191b35f
       internalID: -470313542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 23424_5
+      rect:
+        serializedVersion: 2
+        x: 3960
+        y: 3765
+        width: 782
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a492e63d7c083f24bb7cb22b44f03f17
+      internalID: -818507402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 23424_6
+      rect:
+        serializedVersion: 2
+        x: 3259
+        y: 1442
+        width: 711
+        height: 782
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a91ef00d260a7140a58ca6ece3124ec
+      internalID: 2033479200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 23424_7
+      rect:
+        serializedVersion: 2
+        x: 1001
+        y: 752
+        width: 542
+        height: 762
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1db3e2096e35534184e17af63268c1d
+      internalID: 287328720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 23424_8
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 78
+        width: 565
+        height: 664
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a43f9ca5f9c4984f9f695866d1019d1
+      internalID: 228598432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 23424_9
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 1517
+        width: 664
+        height: 724
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f65f4fa14a7a31b42a61a4aede24c67e
+      internalID: -295267896
       vertices: []
       indices: 
       edges: []
@@ -232,9 +337,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      23424_8: 228598432
       23424_1: 1716099943
       23424_4: -470313542
+      23424_6: 2033479200
       23424_0: 243890107
+      23424_7: 287328720
+      23424_5: -818507402
+      23424_9: -295267896
       23424_2: -610032083
       23424_3: 1282097308
   spritePackingTag: 

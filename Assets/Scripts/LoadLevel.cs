@@ -81,7 +81,7 @@ public class LoadLevel : MonoBehaviour
             SetupTile(tile, type, count);
             count++;
 
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.2f);
         }
         mouseEvent.StarGame();
         timer.StartCounting();
@@ -96,8 +96,9 @@ public class LoadLevel : MonoBehaviour
         t.id = id;
         tileManager.AddTile(id, t);
 
+        int level = PlayerPrefs.GetInt("level");
         Rigidbody rigidbody = tile.GetComponent<Rigidbody>();
-        rigidbody.AddRelativeForce(spawnPos.transform.forward * (force - id * 10));
+        rigidbody.AddRelativeForce(spawnPos.transform.forward * (force - (id - level * 10) * 15));
         rigidbody.AddForce(Vector3.down * force);
     }
 

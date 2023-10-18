@@ -21,17 +21,39 @@ public class DisplayMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SetDisplayLose(!isDisplay);
+            DisplayLose(!isDisplay);
         }
     }
 
-    public void SetDisplayWin(bool value)
+    public void WinDelay()
+    {
+        StartCoroutine(WinDelayCoroutine());
+    }
+
+    IEnumerator WinDelayCoroutine()
+    {
+        yield return new WaitForSeconds(1);
+        DisplayWin(true);
+    }
+
+    public void LoseDelay()
+    {
+        StartCoroutine(LoseDelayCoroutine());
+    }
+
+    IEnumerator LoseDelayCoroutine()
+    {
+        yield return new WaitForSeconds(1);
+        DisplayLose(true);
+    }
+
+    public void DisplayWin(bool value)
     {
         canvas.enabled = value;
         Win();
     }
 
-    public void SetDisplayLose(bool value)
+    public void DisplayLose(bool value)
     {
         isDisplay = value;
         canvas.enabled = value;
